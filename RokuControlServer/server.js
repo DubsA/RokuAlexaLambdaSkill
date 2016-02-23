@@ -200,7 +200,23 @@ var handlers = {
 
 		});
 		response.end("OK");
-	}
+	},
+        "/roku/keypress":function(request,response) {
+                getRequestData(request,function(data) {
+                        var text = data.replace(/^\s+|\s+$/g,'').toLowerCase();      //trim whitespace and lowercase
+                        post(rokuAddress+"keypress/"+text);
+                        response.end("OK");
+                });
+        },
+        //Launch the app requested.
+        "/roku/launch":function(request,response) {
+                getRequestData(request,function(data) {
+                        var appid = data;
+                        post(rokuAddress+"launch/"+appid);
+                        response.end("OK");
+                });
+        }
+
 }
 
 //handles and incoming request by calling the appropriate handler based on the URL
