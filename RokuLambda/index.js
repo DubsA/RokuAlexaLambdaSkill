@@ -4,14 +4,6 @@ var AlexaSkill = require("./AlexaSkill");
 var serverinfo = require("./serverinfo");
 var http = require("http");
 
-var BUTTON_LIST = ["home","reverse","forward","play","select","left","right","down","back","instant replay","info","backspace","search","enter"];
-var APP_LIST = [{name: "roku home news", appid: "31863"},
-			{name: "radio", appid: "3423"},
-			{name: "roku recommends", appid: "41922"},
-			{name: "youtube", appid: "837"},
-			{name: "netflix", appid: "12"},
-];
-
 if (serverinfo.host == "127.0.0.1") {
     throw "Default hostname found, edit your serverinfo.js file to include your server's external IP address";
 }
@@ -91,12 +83,8 @@ AlexaRoku.prototype.intentHandlers = {
 	},
 	LaunchApp: function (intent, session, response) {
 		var text = intent.slots.App.value.replace(/^\s+|\s+$/g,'').toLowerCase();
-		var index = APP_LIST.map(function (e){return e.name;}).indexOf(text);
-		if (index<0){
-			response.ask("Did not find: "+intent.slots.App.value+" in the installed app list.","");
-		} else{
-			sendCommand("/roku/launch",APP_LIST[index].appid,function() {
-			response.tell("Launching the "+APP_LIST[index].name+" app.");
+		sendCommand("/roku/launch",text,function() {
+			response.tell("Launching the "+text+" app.");
 		});
 		}
 	},
